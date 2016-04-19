@@ -1,14 +1,20 @@
 COUNT_SCRIPT = wordcount.py
+PLOT_SCRIPT = plotcount.py
+
 TXT_FILES = $(wildcard books/*.txt)
 DAT_FILES = $(patsubst books/%.txt, %.dat, $(TXT_FILES))
+PNG_FILES = $(patsubst books/%.txt, %.png, $(TXT_FILES))
 
 # analysis.zip: isles.dat abyss.dat last.dat
-analysis.zip: $(DAT_FILES) $(COUNT_SCRIPT)
+analysis.zip: $(DAT_FILES) $(PNG_FILES) $(COUNT_SCRIPT)
 #	zip analysis.zip isles.dat abyss.dat last.dat (plus wordcount.py)
 	zip $@ $^
 
 .PHONY: dats
 dats: $(DAT_FILES)
+
+.PHONY: pngs
+pngs: $(PNG_FILES)
 
 .PHONY: variables
 variables:
@@ -18,6 +24,10 @@ variables:
 # count words
 %.dat: books/%.txt $(COUNT_SCRIPT)
 	python $(COUNT_SCRIPT) $< $*.dat
+
+# make plots
+%.png: %.dat $(PLOT_SCRIPT)
+	python $(PLOT_SCRIPT) $< $*.png
 
 # isles.dat: books/isles.txt wordcount.py
 # 	# python wordcount.py books/isles.txt isles.dat
@@ -33,4 +43,5 @@ variables:
 
 .PHONY: clean
 clean: 
-	rm -f $(DAT_FILES) analysis.zip
+	rm -f $(DAT_FILES) $(PNG_FILES) analysis.zip
+	
