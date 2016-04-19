@@ -6,7 +6,7 @@ DAT_FILES = $(patsubst books/%.txt, %.dat, $(TXT_FILES))
 PNG_FILES = $(patsubst books/%.txt, %.png, $(TXT_FILES))
 
 # analysis.zip: isles.dat abyss.dat last.dat
-analysis.zip: $(DAT_FILES) $(PNG_FILES) $(COUNT_SCRIPT)
+analysis.zip: $(DAT_FILES) $(PNG_FILES) $(COUNT_SCRIPT) $(PLOT_SCRIPT)
 #	zip analysis.zip isles.dat abyss.dat last.dat (plus wordcount.py)
 	zip $@ $^
 
@@ -20,6 +20,7 @@ pngs: $(PNG_FILES)
 variables:
 	@echo TXT_FILES: $(TXT_FILES)
 	@echo DAT_FILES: $(DAT_FILES)
+	@echo PNG_FILES: $(PNG_FILES)
 
 # count words
 %.dat: books/%.txt $(COUNT_SCRIPT)
